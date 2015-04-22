@@ -87,7 +87,7 @@ exports.phantomjs = function(options) {
   }
   var stream = createServer(options, function(server, port) {
     stream.on('end', function() {
-      var phantomProcess = childProcess.spawn('phantomjs', ['phantom_runner.js', port], {
+      var phantomProcess = childProcess.spawn(__dirname + '/node_modules/.bin/phantomjs', ['phantom_runner.js', port], {
         cwd: path.resolve(__dirname, 'lib'),
         stdio: 'pipe'
       });
