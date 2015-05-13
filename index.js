@@ -7,6 +7,7 @@ var portfinder = require('portfinder');
 var through = require('through2');
 var express = require('express');
 var SpecRunner = require('./lib/spec_runner');
+var fs = require('fs');
 
 var DEFAULT_JASMINE_PORT = 8888;
 
@@ -87,7 +88,7 @@ exports.phantomjs = function(options) {
   }
   var stream = createServer(options, function(server, port) {
     stream.on('end', function() {
-      var phantomProcess = childProcess.spawn(__dirname + '/node_modules/.bin/phantomjs', ['phantom_runner.js', port], {
+      var phantomProcess = childProcess.spawn(__dirname + '/node_modules/.bin/phantomjs', ['phantom_runner.js', port, options.xml], {
         cwd: path.resolve(__dirname, 'lib'),
         stdio: 'pipe'
       });
@@ -95,7 +96,12 @@ exports.phantomjs = function(options) {
         server && server.close();
         process.exit(code);
       });
-      phantomProcess.stdout.pipe(process.stdout);
+      phantomProcess.stdout.pipe((function() {
+        if (options.xml) {
+          return fs.createWriteStream('report.xml');
+        }
+        return process.stdout;
+      })());
       phantomProcess.stderr.pipe(process.stderr);
     });
   });
