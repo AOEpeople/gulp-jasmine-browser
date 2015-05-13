@@ -73,6 +73,7 @@ function createServer(options, callback) {
 
 exports.specRunner = function(options) {
   var specRunner = new SpecRunner(options);
+
   return through.obj(function(file, encoding, callback) {
     this.push(file);
     this.push(specRunner.addFile(file.relative));
