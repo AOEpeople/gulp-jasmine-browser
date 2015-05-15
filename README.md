@@ -53,11 +53,11 @@ var jasmineBrowser = require('gulp-jasmine-browser');
 gulp.task('jasmine-phantom', function() {
   return gulp.src(['src/**/*.js', 'spec/**/*_spec.js'])
     .pipe(jasmineBrowser.specRunner({xml: true}))
-    .pipe(jasmineBrowser.phantomjs(xml: true, out: 'path/to/file.xml'));
+    .pipe(jasmineBrowser.phantomjs({xml: true, out: 'path/to/file.xml'}));
 });
 ```
 
-Note the `{xml: true}` passed into specRunner and phantjomjs. With the out parameter you can decide where the output
+Note the `{xml: true}` passed into specRunner and phantjomjs. With the `{out: ''}` property you can decide where the output
 shall be placed and how it shall be named (defaults to report.xml).
 
 
