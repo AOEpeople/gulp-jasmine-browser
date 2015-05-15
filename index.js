@@ -98,7 +98,7 @@ exports.phantomjs = function(options) {
       });
       phantomProcess.stdout.pipe((function() {
         if (options.xml) {
-          return fs.createWriteStream('report.xml');
+          return fs.createWriteStream(options.out || 'report.xml');
         }
         return process.stdout;
       })());
