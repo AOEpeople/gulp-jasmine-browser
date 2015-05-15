@@ -42,8 +42,23 @@ gulp.task('jasmine-phantom', function() {
 
 Note the `{console: true}` passed into specRunner.
 
-GulpJasmineBrowser assumes that `phantomjs` is already installed and in your path.
-It is only tested with PhantomJS 2.
+## Run jasmine tests and get xml report (JUNIT)
+
+In `gulpfile.js`
+
+```js
+var gulp = require('gulp');
+var jasmineBrowser = require('gulp-jasmine-browser');
+
+gulp.task('jasmine-phantom', function() {
+  return gulp.src(['src/**/*.js', 'spec/**/*_spec.js'])
+    .pipe(jasmineBrowser.specRunner({xml: true}))
+    .pipe(jasmineBrowser.phantomjs(xml: true, out: 'path/to/file.xml'));
+});
+```
+
+Note the `{xml: true}` passed into specRunner and phantjomjs. With the out parameter you can decide where the output
+shall be placed and how it shall be named (defaults to report.xml).
 
 
 ### Usage with Webpack
