@@ -42,7 +42,7 @@ gulp.task('jasmine-phantom', function() {
 
 Note the `{console: true}` passed into specRunner.
 
-## Run jasmine tests and get xml report (JUNIT)
+### Run jasmine tests and get xml report (JUNIT)
 
 In `gulpfile.js`
 
