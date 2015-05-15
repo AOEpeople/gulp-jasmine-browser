@@ -10,6 +10,7 @@ var SpecRunner = require('./lib/spec_runner');
 var fs = require('fs');
 
 var DEFAULT_JASMINE_PORT = 8888;
+var gulpOptions;
 
 function startNewServer(port, stream, files, callback) {
   function renderFile(res, pathname) {
@@ -73,6 +74,7 @@ function createServer(options, callback) {
 }
 
 exports.specRunner = function(options) {
+  gulpOptions = options;
   var specRunner = new SpecRunner(options);
   return through.obj(function(file, encoding, callback) {
     this.push(file);
@@ -88,7 +90,7 @@ exports.phantomjs = function(options) {
   }
   var stream = createServer(options, function(server, port) {
     stream.on('end', function() {
-      var phantomProcess = childProcess.spawn(__dirname + '/node_modules/.bin/phantomjs', ['phantom_runner.js', port, options.xml], {
+      var phantomProcess = childProcess.spawn(__dirname + '/node_modules/.bin/phantomjs', ['phantom_runner.js', port, gulpOptions.xml], {
         cwd: path.resolve(__dirname, 'lib'),
         stdio: 'pipe'
       });
@@ -97,8 +99,8 @@ exports.phantomjs = function(options) {
         process.exit(code);
       });
       phantomProcess.stdout.pipe((function() {
-        if (options.xml) {
-          return fs.createWriteStream(options.out || 'report.xml');
+        if (gulpOptions.xml) {
+          return fs.createWriteStream(gulpOptions.out || 'report.xml');
         }
         return process.stdout;
       })());
