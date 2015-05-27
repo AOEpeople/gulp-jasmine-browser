@@ -8,6 +8,7 @@ var through = require('through2');
 var express = require('express');
 var SpecRunner = require('./lib/spec_runner');
 var fs = require('fs');
+var devnull = require('dev-null');
 
 var DEFAULT_JASMINE_PORT = 8888;
 var gulpOptions;
@@ -104,7 +105,12 @@ exports.phantomjs = function(options) {
         }
         return process.stdout;
       })());
-      phantomProcess.stderr.pipe(process.stderr);
+      phantomProcess.stderr.pipe((function() {
+        if (gulpOptions.xml) {
+          return devnull();
+        }
+        return process.stderr;
+      })());
     });
   });
   return stream;
